@@ -5,12 +5,6 @@
 //  Created by Matt. on 6/27/18.
 //  Copyright © 2018 mbenn. All rights reserved.
 //
-//
-//  Acknowledgements:
-//
-//  Sohil Pandya's blog post for the initial guidance behind acquiring a user's step count.
-//  See his post on GitHub here: https://github.com/dwyl/learn-apple-watch-development/issues/43
-//
 
 import UIKit
 import HealthKit
@@ -22,7 +16,7 @@ class ViewController: UIViewController {
     
     var healthStore = HKHealthStore()
     let todaysDate = Date().toString(dateFormat: "MM/dd/yy")
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -124,9 +118,21 @@ class ViewController: UIViewController {
         
         let now = Date()
         let startOfDay = Calendar.current.startOfDay(for: now)
-        let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: now, options: .strictStartDate)
         
-        let query = HKStatisticsQuery(quantityType: stepsQuantityType, quantitySamplePredicate: predicate, options: .cumulativeSum) { (_, result, error) in
+        var interval = DateComponents()
+        interval.day = 1
+        
+        var anchorComponents = Calendar.current.dateComponents([.day, .month, .year], from: now)
+        anchorComponents.hour = 0
+        let anchorDate = Calendar.current.date(from: anchorComponents)!
+        
+        let query = HKStatisticsCollectionQuery(quantityType: stepsQuantityType,
+                                                quantitySamplePredicate: nil,
+                                                options: [.cumulativeSum],
+                                                anchorDate: anchorDate,
+                                                intervalComponents: interval)
+        query.initialResultsHandler = { _, result, error in
+            
             var resultCount = -1.0
             
             guard let result = result else {
@@ -134,16 +140,31 @@ class ViewController: UIViewController {
                 return
             }
             
-            if let sum = result.sumQuantity() {
-                // Get steps (they are of double type)
-                resultCount = sum.doubleValue(for: HKUnit.count())
-            } // end if
-            
-            DispatchQueue.main.async {
-                completion(resultCount)
+            result.enumerateStatistics(from: startOfDay, to: now) { statistics, _ in
+                if let sum = statistics.sumQuantity() {
+                    // Get steps (they are of double type)
+                    resultCount = sum.doubleValue(for: HKUnit.count())
+                }
+                
+                // Return
+                DispatchQueue.main.async {
+                    completion(resultCount)
+                }
             }
             
-        } // end of query
+        }
+        
+        query.statisticsUpdateHandler = {
+            query, statistics, statisticsCollection, error in
+            
+            if let sum = statistics?.sumQuantity() {
+                let resultCount = sum.doubleValue(for: HKUnit.count())
+                DispatchQueue.main.async {
+                    completion(resultCount)
+                }
+            }
+            
+        }
         
         healthStore.execute(query)
         
