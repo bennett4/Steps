@@ -24,7 +24,7 @@ class ViewController: UIViewController {
         dateLabel.text = todaysDate
         
         // Check to see if the app already has permissions
-        if (isAuthorized()) {
+        if (appIsAuthorized()) {
             displaySteps()
         } // end if
         
@@ -81,7 +81,7 @@ class ViewController: UIViewController {
                 if (stepCount == "-1") {
                     
                     // If we do not have permissions
-                    if (!self.isAuthorized()) {
+                    if (!self.appIsAuthorized()) {
                         self.stepsLabel.text = "Settings  >  Privacy  >  Health  >  Steps"
                     } // end if
                     
@@ -157,6 +157,7 @@ class ViewController: UIViewController {
         query.statisticsUpdateHandler = {
             query, statistics, statisticsCollection, error in
             
+            // If new statistics are available
             if let sum = statistics?.sumQuantity() {
                 let resultCount = sum.doubleValue(for: HKUnit.count())
                 DispatchQueue.main.async {
@@ -171,7 +172,7 @@ class ViewController: UIViewController {
     } // end of func getTodaysSteps
     
     
-    func isAuthorized() -> Bool {
+    func appIsAuthorized() -> Bool {
         if (self.healthStore.authorizationStatus(for: HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!) == .sharingAuthorized) {
             return true
         }
