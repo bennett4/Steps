@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DwI-Gk-pyV">
-                                <rect key="frame" x="0.0" y="283" width="375" height="100"/>
+                                <rect key="frame" x="0.0" y="208.5" width="375" height="100"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="375" id="BPf-pN-bNB"/>
                                     <constraint firstAttribute="height" constant="100" id="Pdk-yV-Ule"/>
@@ -28,29 +28,47 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HJS-Qd-S9p">
-                                <rect key="frame" x="51" y="170" width="272" height="53"/>
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZCP-jD-QJG">
+                                <rect key="frame" x="17" y="373" width="119" height="78"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="53" id="hua-RX-r08"/>
-                                    <constraint firstAttribute="width" constant="272" id="vid-Dc-ika"/>
+                                    <constraint firstAttribute="height" constant="78" id="VOk-Wh-Uzw"/>
+                                    <constraint firstAttribute="width" constant="119" id="ulN-9U-dmS"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            </pickerView>
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QgR-ip-t8n">
+                                <rect key="frame" x="109" y="373" width="114" height="78"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="114" id="B4J-Me-VG6"/>
+                                    <constraint firstAttribute="height" constant="78" id="uMF-n4-toH"/>
+                                </constraints>
+                            </pickerView>
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cKQ-dN-ChH">
+                                <rect key="frame" x="182" y="373" width="175" height="78"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="175" id="N9g-5w-Ony"/>
+                                    <constraint firstAttribute="height" constant="78" id="OGt-Zz-I7E"/>
+                                </constraints>
+                            </pickerView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="HJS-Qd-S9p" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="150" id="FUH-nH-HHO"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="QgR-ip-t8n" secondAttribute="trailing" constant="152" id="9HR-Ds-Nnj"/>
+                            <constraint firstItem="cKQ-dN-ChH" firstAttribute="top" secondItem="DwI-Gk-pyV" secondAttribute="bottom" constant="64.5" id="BM1-pe-bDn"/>
+                            <constraint firstItem="DwI-Gk-pyV" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-75" id="CSm-lQ-3eY"/>
+                            <constraint firstItem="QgR-ip-t8n" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="109" id="Hf2-QD-7bI"/>
+                            <constraint firstItem="cKQ-dN-ChH" firstAttribute="leading" secondItem="ZCP-jD-QJG" secondAttribute="trailing" constant="46" id="Ln4-mc-7EA"/>
+                            <constraint firstItem="ZCP-jD-QJG" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="17" id="QNj-71-xQw"/>
                             <constraint firstItem="DwI-Gk-pyV" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Zam-ZH-YjR"/>
-                            <constraint firstItem="DwI-Gk-pyV" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="boi-dr-tam"/>
-                            <constraint firstItem="HJS-Qd-S9p" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="gWm-Za-I3Q"/>
+                            <constraint firstItem="QgR-ip-t8n" firstAttribute="top" secondItem="DwI-Gk-pyV" secondAttribute="bottom" constant="64.5" id="ZmG-SS-3PG"/>
+                            <constraint firstItem="ZCP-jD-QJG" firstAttribute="top" secondItem="DwI-Gk-pyV" secondAttribute="bottom" constant="64.5" id="oYr-OV-iVO"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="dateLabel" destination="HJS-Qd-S9p" id="m0H-nK-qpk"/>
+                        <outlet property="dayPicker" destination="QgR-ip-t8n" id="pFR-MN-vm7"/>
+                        <outlet property="monthPicker" destination="ZCP-jD-QJG" id="oF1-Kc-tFd"/>
                         <outlet property="stepsLabel" destination="DwI-Gk-pyV" id="TQQ-3Z-aVf"/>
+                        <outlet property="yearPicker" destination="cKQ-dN-ChH" id="KHH-tp-aOh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

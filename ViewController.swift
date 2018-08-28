@@ -9,19 +9,23 @@
 import UIKit
 import HealthKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
     @IBOutlet weak var stepsLabel: UILabel!
-    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var monthPicker: UIPickerView!
+    @IBOutlet weak var dayPicker: UIPickerView!
+    @IBOutlet weak var yearPicker: UIPickerView!
     
     var healthStore = HKHealthStore()
-    let todaysDate = Date().toString(dateFormat: "MM/dd/yy")
+    var dateHelper = DateHelper()
+    
+    var monthArray = [Int]()
+    var dayArray = [Int]()
+    var yearArray = [Int]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Set the text of the date label
-        dateLabel.text = todaysDate
+        initializeDateArrays()
         
         // Check to see if the app already has permissions
         if (appIsAuthorized()) {
@@ -33,15 +37,7 @@ class ViewController: UIViewController {
             handlePermissions()
         } // end else
         
-        // Center text within each label
-        stepsLabel.textAlignment = NSTextAlignment.center
-        dateLabel.textAlignment = NSTextAlignment.center
-        
-        // Resize font of stepsLabel if it is too large
-        stepsLabel.numberOfLines = 1
-        stepsLabel.minimumScaleFactor = 0.1
-        stepsLabel.adjustsFontSizeToFitWidth = true;
-        
+        adjustLabelText()
     } // end of function viewDidLoad
 
     
@@ -116,13 +112,16 @@ class ViewController: UIViewController {
         
         let stepsQuantityType = HKQuantityType.quantityType(forIdentifier: .stepCount)!
         
-        let now = Date()
-        let startOfDay = Calendar.current.startOfDay(for: now)
+        let selectedDate = dateHelper.getSelectedDate(year: yearArray[self.yearPicker.selectedRow(inComponent: 0)],
+                                                      month: monthArray[self.monthPicker.selectedRow(inComponent: 0)],
+                                                      day: dayArray[self.dayPicker.selectedRow(inComponent: 0)])
+        
+        let startOfDay = Calendar.current.startOfDay(for: selectedDate)
         
         var interval = DateComponents()
         interval.day = 1
         
-        var anchorComponents = Calendar.current.dateComponents([.day, .month, .year], from: now)
+        var anchorComponents = Calendar.current.dateComponents([.day, .month, .year], from: selectedDate)
         anchorComponents.hour = 0
         let anchorDate = Calendar.current.date(from: anchorComponents)!
         
@@ -140,7 +139,7 @@ class ViewController: UIViewController {
                 return
             }
             
-            result.enumerateStatistics(from: startOfDay, to: now) { statistics, _ in
+            result.enumerateStatistics(from: startOfDay, to: selectedDate) { statistics, _ in
                 if let sum = statistics.sumQuantity() {
                     // Get steps (they are of double type)
                     resultCount = sum.doubleValue(for: HKUnit.count())
@@ -179,7 +178,177 @@ class ViewController: UIViewController {
         else {
             return false
         }
+    } // end of method appIsAuthorized
+    
+    
+    func initializeDateArrays() {
+        for i in 1...12 {
+            monthArray.append(i)
+        }
+        
+        for i in 1...31 {
+            dayArray.append(i)
+        }
+        
+        let components = Calendar.current.dateComponents([.year], from: Date())
+        let year =  components.year
+        
+        for i in 2014...year! {
+            yearArray.append(i)
+        }
+        
+        self.monthPicker.delegate = self
+        self.monthPicker.dataSource = self
+        self.dayPicker.delegate = self
+        self.dayPicker.dataSource = self
+        self.yearPicker.delegate = self
+        self.yearPicker.dataSource = self
+        
+        self.monthPicker.selectRow(dateHelper.getCurrentMonth() - 1, inComponent: 0, animated: false)
+        self.dayPicker.selectRow(dateHelper.getCurrentDay() - 1, inComponent: 0, animated: false)
+        self.yearPicker.selectRow(yearArray.count - 1, inComponent: 0, animated: false)
+    } // end of method InitializeDateArrays
+    
+    func adjustLabelText() {
+        // Center text within each label
+        stepsLabel.textAlignment = NSTextAlignment.center
+        
+        // Resize font of stepsLabel if it is too large
+        stepsLabel.numberOfLines = 1
+        stepsLabel.minimumScaleFactor = 0.1
+        stepsLabel.adjustsFontSizeToFitWidth = true;
     }
     
+    
+    func getAvailableDays(month: Int) -> Array<Int> {
+        var daysForSpecifiedDay = dayArray
+        
+        let components = Calendar.current.dateComponents([.month, .day], from: Date())
+        let currentDay =  components.day
+        let currentMonth =  components.month
+        
+        var isCurrentMonth = false
+        
+        // If the selected row in yearPicker is the current year
+        if (yearPicker.selectedRow(inComponent: 0) == yearArray.count - 1) {
+            
+            // If the selected row in monthPicker is the current month
+            if (monthPicker.selectedRow(inComponent: 0)+1 == monthArray[currentMonth!-1]) {
+                
+                isCurrentMonth = true
+                daysForSpecifiedDay.removeSubrange(currentDay!...daysForSpecifiedDay.count-1)
+                
+            }
+        }
+        
+        // If the selected row in monthPicker is not the current month
+        if (!isCurrentMonth) {
+            let thirtyDayMonths = [4, 6, 9, 11]
+            
+            // If a 30 Day Month
+            if (thirtyDayMonths.contains(month)) {
+                daysForSpecifiedDay.removeLast()
+            }
+            // If February
+            else if (month == 2) {
+                for _ in 1...3 {
+                    daysForSpecifiedDay.removeLast()
+                }
+            }
+        } // end if
+        
+        return daysForSpecifiedDay
+    } // end of func getDays
+    
+    
+    func getAvailableMonths() -> Array<Int> {
+        var monthsForSpecifiedYear = monthArray
+        
+        let component = Calendar.current.dateComponents([.month], from: Date())
+        let month =  component.month
+        
+        // If the selected row is the current year
+        if (yearPicker.selectedRow(inComponent: 0) == yearArray.count - 1) {
+            for _ in 1...(12-month!) {
+                monthsForSpecifiedYear.removeLast()
+            }
+        }
+        return monthsForSpecifiedYear
+    }
+    
+    
+    // UIPickerView Methods
+    
+    // Number of Columns in a Single Picker
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        // Hide Top and Bottom Border of Each UIPickerView
+        pickerView.subviews.forEach({
+            $0.isHidden = $0.frame.height < 1.0
+        })
+        return 1
+    }
+    
+    // Number of Items in the PickerView
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        if pickerView == yearPicker {
+            return yearArray.count
+        }
+        else if pickerView == monthPicker {
+            return getAvailableMonths().count
+        }
+        else {
+            return getAvailableDays(month: (monthPicker.selectedRow(inComponent: 0) + 1)).count
+        }
+    }
+    
+    // What Is Displayed
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        if pickerView == yearPicker {
+            return String(yearArray[row])
+        }
+        else if pickerView == monthPicker {
+            return String(monthArray[row])
+        }
+        else {
+            return String(dayArray[row])
+        }
+    }
+    
+    // Row Changed
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        if pickerView == yearPicker {
+            monthPicker.reloadAllComponents()
+            dayPicker.reloadAllComponents()
+        }
+        else if pickerView == monthPicker {
+            dayPicker.reloadAllComponents()
+        }
+        displaySteps()
+    }
+    
+    // Font Size
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+        var label = UILabel()
+        if let v = view {
+            label = v as! UILabel
+        }
+        label.font = UIFont (name: "Helvetica Neue", size:40)
+        if (pickerView == yearPicker) {
+            label.text =  String(yearArray[row])
+        }
+        else if (pickerView == monthPicker) {
+            label.text =  String(monthArray[row])
+        }
+        else {
+            label.text =  String(dayArray[row])
+        }
+        label.textAlignment = .center
+        return label
+    }
+    
+    // Set Height of Row of Each UIPickerView
+    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+        return 50
+    }
     
 } // end of class ViewController
