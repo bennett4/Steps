@@ -23,6 +23,10 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     var dayArray = [Int]()
     var yearArray = [Int]()
     
+    var selectedYear: Int = 0
+    var selectedMonth: Int = 0
+    var selectedDay: Int = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeDateArrays()
@@ -54,7 +58,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         // Check Authorization
         healthStore.requestAuthorization(toShare: healthKitTypes, read: healthKitTypes) { (bool, error) in
             
-            if error == nil {
+            if (bool) {
                 
                 // Authorization Successful
                 self.displaySteps()
@@ -68,7 +72,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     
     func displaySteps() {
         
-        getTodaysSteps { (result) in
+        getSteps { (result) in
             DispatchQueue.main.async {
                 
                 var stepCount = String(Int(result))
@@ -108,13 +112,11 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     } // end of func displaySteps
     
     
-    func getTodaysSteps(completion: @escaping (Double) -> Void) {
+    func getSteps(completion: @escaping (Double) -> Void) {
         
         let stepsQuantityType = HKQuantityType.quantityType(forIdentifier: .stepCount)!
         
-        let selectedDate = dateHelper.getSelectedDate(year: yearArray[self.yearPicker.selectedRow(inComponent: 0)],
-                                                      month: monthArray[self.monthPicker.selectedRow(inComponent: 0)],
-                                                      day: dayArray[self.dayPicker.selectedRow(inComponent: 0)])
+        let selectedDate = dateHelper.getSelectedDate(year: selectedYear, month: selectedMonth, day: selectedDay)
         
         let startOfDay = Calendar.current.startOfDay(for: selectedDate)
         
@@ -168,7 +170,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         
         healthStore.execute(query)
         
-    } // end of func getTodaysSteps
+    } // end of func getSteps
     
     
     func appIsAuthorized() -> Bool {
@@ -207,6 +209,10 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         self.monthPicker.selectRow(dateHelper.getCurrentMonth() - 1, inComponent: 0, animated: false)
         self.dayPicker.selectRow(dateHelper.getCurrentDay() - 1, inComponent: 0, animated: false)
         self.yearPicker.selectRow(yearArray.count - 1, inComponent: 0, animated: false)
+        
+        selectedYear = yearArray[self.yearPicker.selectedRow(inComponent: 0)]
+        selectedMonth = monthArray[self.monthPicker.selectedRow(inComponent: 0)]
+        selectedDay = dayArray[self.dayPicker.selectedRow(inComponent: 0)]
     } // end of method InitializeDateArrays
     
     func adjustLabelText() {
@@ -317,11 +323,16 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     // Row Changed
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if pickerView == yearPicker {
+            selectedYear = yearArray[self.yearPicker.selectedRow(inComponent: 0)]
             monthPicker.reloadAllComponents()
             dayPicker.reloadAllComponents()
         }
         else if pickerView == monthPicker {
+            selectedMonth = monthArray[self.monthPicker.selectedRow(inComponent: 0)]
             dayPicker.reloadAllComponents()
+        }
+        else {
+            selectedDay = dayArray[self.dayPicker.selectedRow(inComponent: 0)]
         }
         displaySteps()
     }
