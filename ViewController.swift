@@ -325,15 +325,14 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         if pickerView == yearPicker {
             selectedYear = yearArray[self.yearPicker.selectedRow(inComponent: 0)]
             monthPicker.reloadAllComponents()
+            selectedMonth = monthArray[self.monthPicker.selectedRow(inComponent: 0)]
             dayPicker.reloadAllComponents()
         }
         else if pickerView == monthPicker {
             selectedMonth = monthArray[self.monthPicker.selectedRow(inComponent: 0)]
             dayPicker.reloadAllComponents()
         }
-        else {
-            selectedDay = dayArray[self.dayPicker.selectedRow(inComponent: 0)]
-        }
+        selectedDay = dayArray[self.dayPicker.selectedRow(inComponent: 0)]
         displaySteps()
     }
     
