@@ -28,39 +28,59 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZCP-jD-QJG">
-                                <rect key="frame" x="17" y="373" width="119" height="78"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="78" id="VOk-Wh-Uzw"/>
-                                    <constraint firstAttribute="width" constant="119" id="ulN-9U-dmS"/>
-                                </constraints>
-                            </pickerView>
-                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QgR-ip-t8n">
-                                <rect key="frame" x="109" y="373" width="114" height="78"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="114" id="B4J-Me-VG6"/>
-                                    <constraint firstAttribute="height" constant="78" id="uMF-n4-toH"/>
-                                </constraints>
-                            </pickerView>
-                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cKQ-dN-ChH">
-                                <rect key="frame" x="182" y="373" width="175" height="78"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="175" id="N9g-5w-Ony"/>
-                                    <constraint firstAttribute="height" constant="78" id="OGt-Zz-I7E"/>
-                                </constraints>
-                            </pickerView>
+                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SJG-QN-pwP" userLabel="Picker View">
+                                <rect key="frame" x="34.5" y="343.5" width="307" height="80"/>
+                                <subviews>
+                                    <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZCP-jD-QJG">
+                                        <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="80" id="7Gt-Qn-g6D"/>
+                                            <constraint firstAttribute="width" constant="80" id="TpN-ez-Lvx"/>
+                                        </constraints>
+                                    </pickerView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="/" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hMd-id-wVW">
+                                        <rect key="frame" x="80" y="0.0" width="13.5" height="80"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="13" id="juz-3G-edY"/>
+                                            <constraint firstAttribute="height" constant="80" id="rqy-a8-fLy"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="40"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QgR-ip-t8n">
+                                        <rect key="frame" x="93.5" y="0.0" width="80" height="80"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="80" id="d6o-Be-LXY"/>
+                                            <constraint firstAttribute="height" constant="80" id="e0M-te-U4F"/>
+                                        </constraints>
+                                    </pickerView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="/" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fUD-ri-J7X">
+                                        <rect key="frame" x="173.5" y="0.0" width="13.5" height="80"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="80" id="J4r-qj-qcy"/>
+                                            <constraint firstAttribute="width" constant="13" id="ztX-rj-d4l"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="40"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cKQ-dN-ChH">
+                                        <rect key="frame" x="187" y="0.0" width="120" height="80"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="120" id="7N6-B8-csT"/>
+                                            <constraint firstAttribute="height" constant="80" id="8LK-Yi-RaU"/>
+                                        </constraints>
+                                    </pickerView>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="QgR-ip-t8n" secondAttribute="trailing" constant="152" id="9HR-Ds-Nnj"/>
-                            <constraint firstItem="cKQ-dN-ChH" firstAttribute="top" secondItem="DwI-Gk-pyV" secondAttribute="bottom" constant="64.5" id="BM1-pe-bDn"/>
+                            <constraint firstItem="SJG-QN-pwP" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="2aD-dx-mqK"/>
                             <constraint firstItem="DwI-Gk-pyV" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-75" id="CSm-lQ-3eY"/>
-                            <constraint firstItem="QgR-ip-t8n" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="109" id="Hf2-QD-7bI"/>
-                            <constraint firstItem="cKQ-dN-ChH" firstAttribute="leading" secondItem="ZCP-jD-QJG" secondAttribute="trailing" constant="46" id="Ln4-mc-7EA"/>
-                            <constraint firstItem="ZCP-jD-QJG" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="17" id="QNj-71-xQw"/>
                             <constraint firstItem="DwI-Gk-pyV" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Zam-ZH-YjR"/>
-                            <constraint firstItem="QgR-ip-t8n" firstAttribute="top" secondItem="DwI-Gk-pyV" secondAttribute="bottom" constant="64.5" id="ZmG-SS-3PG"/>
-                            <constraint firstItem="ZCP-jD-QJG" firstAttribute="top" secondItem="DwI-Gk-pyV" secondAttribute="bottom" constant="64.5" id="oYr-OV-iVO"/>
+                            <constraint firstItem="SJG-QN-pwP" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="50" id="yg1-RI-cCo"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
