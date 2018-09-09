@@ -123,14 +123,10 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         var interval = DateComponents()
         interval.day = 1
         
-        var anchorComponents = Calendar.current.dateComponents([.day, .month, .year], from: selectedDate)
-        anchorComponents.hour = 0
-        let anchorDate = Calendar.current.date(from: anchorComponents)!
-        
         let query = HKStatisticsCollectionQuery(quantityType: stepsQuantityType,
                                                 quantitySamplePredicate: nil,
                                                 options: [.cumulativeSum],
-                                                anchorDate: anchorDate,
+                                                anchorDate: startOfDay,
                                                 intervalComponents: interval)
         query.initialResultsHandler = { _, result, error in
             
