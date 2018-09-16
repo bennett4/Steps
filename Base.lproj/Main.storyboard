@@ -80,6 +80,7 @@
                             <constraint firstItem="SJG-QN-pwP" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="2aD-dx-mqK"/>
                             <constraint firstItem="DwI-Gk-pyV" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-75" id="CSm-lQ-3eY"/>
                             <constraint firstItem="DwI-Gk-pyV" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Zam-ZH-YjR"/>
+                            <constraint firstItem="DwI-Gk-pyV" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="eit-BB-sIq"/>
                             <constraint firstItem="SJG-QN-pwP" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="50" id="yg1-RI-cCo"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
